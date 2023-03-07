@@ -132,13 +132,16 @@ func AdjustedSimnetMiner(ctx context.Context, client *rpcclient.Client, nb uint3
 	}
 
 	// Wait until the template changes or some time has passed.
-	waitPredicate(func() bool {
+	err = waitPredicate(func() bool {
 		work, err := client.GetWork(ctx)
 		if err != nil {
 			return false
 		}
 		return work.Data != prevWork.Data
 	}, time.Second)
+	if err != nil {
+		return nil, err
+	}
 
 	hashes := make([]*chainhash.Hash, nb)
 	for i := uint32(0); i < nb; i++ {
