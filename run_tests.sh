@@ -48,7 +48,7 @@ for module in $MODPATHS; do
   (
     cd $MODNAME
 
-    GOWORK="$GOWORK" go test ./... $GOTESTARGS
+    GOWORK="$GOWORK" GORACE=halt_on_errors=1 go test -race ./... $GOTESTARGS
 
     golangci-lint run
   )
